@@ -6,10 +6,10 @@ CFLAGS = -c -Wall -std=c++17
 
 all: main
 
-test: main.o ROSAllocator.o
+test: main.o
 	$(CC) main.o -o test
 	
-main.o: main.cpp
+main.o: main.cpp ROSAllocator.hpp
 	$(CC) $(CFLAGS) main.cpp
 	
 clean:

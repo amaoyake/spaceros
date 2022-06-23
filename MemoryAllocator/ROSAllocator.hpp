@@ -8,15 +8,17 @@ const unsigned int SMALL_MEM  = 128;
 const unsigned int MEDIUM_MEM = 4096;
 const unsigned int LARGE_MEM  = 32768;
 
-typedef std::array<std::uint8_t, SMALL_MEM>  SMALL_BUFFER;
-typedef std::array<std::uint8_t, MEDIUM_MEM> MEDIUM_BUFFER;
-typedef std::array<std::uint8_t, LARGE_MEM>  LARGE_BUFFER;
+template <size_t N>
+using MEMORY_BUFFER = std::array<std::uint8_t, N>;
+
 
 class ROSAllocator : public std::pmr::memory_resource
 {
  public:
-    ROSAllocator(std::string name) : m_name(std::move(name))
-    {
+	ROSAllocator(std::string name, MEMORY_BUFFER<4000> buffer) : m_name(std::move(name)),
+	monotonic(buffer.data(), buffer.size(), std::pmr::null_memory_resource()),
+	memory_pool(&monotonic)
+	{
 
     }
 
@@ -25,9 +27,8 @@ class ROSAllocator : public std::pmr::memory_resource
     std::pmr::memory_resource* m_upstream;
 
     // Declare memory in the class stack
-    std::array<std::uint8_t, 3000>  buffer{};
-    std::pmr::monotonic_buffer_resource monotonic{buffer.data(), buffer.size(), std::pmr::null_memory_resource()};
-    std::pmr::unsynchronized_pool_resource memory_pool{&monotonic};
+    std::pmr::monotonic_buffer_resource monotonic;
+    std::pmr::unsynchronized_pool_resource memory_pool;
 
     void* do_allocate(std::size_t bytes, std::size_t alignment) 
     {
