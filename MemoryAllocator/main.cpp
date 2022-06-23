@@ -5,8 +5,8 @@
 
 int main()
 {
-	
-	MEMORY_BUFFER<4000> buffer;
+    
+    MEMORY_BUFFER<4000> buffer;
     std::string name1 = "foo";
     char test_string1[40] = "a different long string 1";
     

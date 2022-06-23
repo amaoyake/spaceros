@@ -15,10 +15,10 @@ using MEMORY_BUFFER = std::array<std::uint8_t, N>;
 class ROSAllocator : public std::pmr::memory_resource
 {
  public:
-	ROSAllocator(std::string name, MEMORY_BUFFER<4000> buffer) : m_name(std::move(name)),
-	monotonic(buffer.data(), buffer.size(), std::pmr::null_memory_resource()),
-	memory_pool(&monotonic)
-	{
+    ROSAllocator(std::string name, MEMORY_BUFFER<4000> buffer) : m_name(std::move(name)),
+    monotonic(buffer.data(), buffer.size(), std::pmr::null_memory_resource()),
+    memory_pool(&monotonic)
+    {
 
     }
 
