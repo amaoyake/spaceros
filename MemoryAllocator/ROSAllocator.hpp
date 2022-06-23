@@ -11,12 +11,15 @@ const unsigned int LARGE_MEM  = 32768;
 template <size_t N>
 using MEMORY_BUFFER = std::array<std::uint8_t, N>;
 
+template <size_t N>
+using PREALLOCATE = std::array<std::uint8_t, N>;
+
 
 class ROSAllocator : public std::pmr::memory_resource
 {
  public:
-    ROSAllocator(std::string name, MEMORY_BUFFER<4000> buffer) : m_name(std::move(name)),
-    monotonic(buffer.data(), buffer.size(), std::pmr::null_memory_resource()),
+    ROSAllocator(std::string name, unsigned char* buffer, size_t buffer_size) : m_name(std::move(name)),
+    monotonic(buffer, buffer_size, std::pmr::null_memory_resource()),
     memory_pool(&monotonic)
     {
 
